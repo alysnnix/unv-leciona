@@ -23,5 +23,6 @@ COPY . /app/
 # Expõe a porta que o Django vai rodar
 EXPOSE 8080
 
-# Comando para iniciar o servidor
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]
+# Comando para iniciar o servidor em produção
+# O docker-compose local sobrescreve este comando para usar o runserver
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8080", "--workers", "3"]
