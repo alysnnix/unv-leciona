@@ -1,6 +1,6 @@
-# Class Board
+# Leciona
 
-This project is a Django application with PostgreSQL focused on **daily operational school management**, serving as an "Interactive Panel" for secretariats and coordinators.
+This project is a Django application with PostgreSQL focused on **daily operational school management**, serving as an interactive dashboard for secretariats and coordinators.
 
 The system allows managing schedules, teacher allocation, and tracking absences/substitutions in a centralized and agile way.
 

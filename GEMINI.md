@@ -1,9 +1,9 @@
-# 🧠 Gemini Context: Univesp Class Board
+# 🧠 Gemini Context: Leciona
 
-Welcome back, self! This document serves as the absolute source of truth for the `unv-class-board` project. Read this carefully before starting any new interaction.
+Welcome back, self! This document serves as the absolute source of truth for the `Leciona` project. Read this carefully before starting any new interaction.
 
 ## 🎯 Project Objective
-**"Interactive Panel" (Painel Interativo)** is a Django-based Back-Office web application designed for daily operational school management. It is built for school coordinators and secretariats to centrally manage class schedules, track teacher absences, assign substitutes, and broadcast announcements.
+**Leciona** is a Django-based Back-Office web application designed for daily operational school management. It is built for school coordinators and secretariats to centrally manage class schedules, track teacher absences, assign substitutes, and broadcast announcements.
 
 ## 🏗️ Architecture & Modules (English/SOLID Refactored)
 The project was originally in Portuguese but underwent a massive refactoring to English naming conventions, adhering to SOLID principles and proper database normalization.
