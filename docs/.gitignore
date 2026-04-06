@@ -1,0 +1,11 @@
+# Build artifacts (PDFs intermediários ficam em */build/)
+**/build/*.aux
+**/build/*.log
+**/build/*.synctex.gz
+**/build/*.toc
+**/build/*.lof
+**/build/*.lot
+**/build/*.out
+
+# PDFs de build ficam ignorados — os finais vão para entregues/
+**/build/*.pdf

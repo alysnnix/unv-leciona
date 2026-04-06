@@ -1,0 +1,50 @@
+% =============================================================================
+% Relatório Parcial — Projeto Integrador UNIVESP
+% Template: copie esta pasta e edite os campos abaixo
+% =============================================================================
+\documentclass[
+    12pt,
+    a4paper,
+    oneside
+]{report}
+
+\usepackage{univesp-abnt}
+
+% ── Metadata (edite aqui) ────────────────────────────────────────────────────
+\newcommand{\doctitulo}{Título do trabalho (Frase curta que sintetize o foco do trabalho)}
+\newcommand{\docautores}{Nome dos integrantes}
+\newcommand{\doccidade}{Cidade}
+\newcommand{\docano}{2026}
+\newcommand{\doccurso}{Nome do curso}
+\newcommand{\doctutor}{Nome do Tutor}
+\newcommand{\docpaginas}{00}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{document}
+\selectlanguage{brazil}
+\frenchspacing
+
+% Pré-textuais
+\input{content/cover}
+\input{content/abstract}
+
+\clearpage
+\listoffigures
+
+\clearpage
+\listoftables
+
+\clearpage
+\tableofcontents
+
+% Textuais
+\clearpage
+\pagenumbering{arabic}
+\input{content/introduction}
+\input{content/development}
+
+% Pós-textuais
+\input{content/references}
+\input{content/appendices}
+
+\end{document}

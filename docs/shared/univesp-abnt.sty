@@ -1,0 +1,131 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{univesp-abnt}[2026/03/25 Formatacao ABNT para UNIVESP]
+
+% ---------------------------------------------------------------------------
+% Pacotes
+% ---------------------------------------------------------------------------
+\RequirePackage[T1]{fontenc}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[brazil]{babel}
+\RequirePackage{mathptmx}              % Times New Roman
+\RequirePackage{indentfirst}            % indenta primeiro paragrafo
+\RequirePackage{microtype}
+\RequirePackage{graphicx}
+\RequirePackage{booktabs}
+\RequirePackage{float}
+\RequirePackage{setspace}               % controle de espacamento
+\RequirePackage{fancyhdr}               % cabecalho/rodape
+\RequirePackage{caption}                % legendas
+\RequirePackage{hyperref}
+\RequirePackage{bookmark}
+
+% ---------------------------------------------------------------------------
+% Margens ABNT: superior e esquerda 3cm; inferior e direita 2cm
+% ---------------------------------------------------------------------------
+\RequirePackage[
+    top=3cm,
+    left=3cm,
+    bottom=2cm,
+    right=2cm,
+    headheight=14.5pt
+]{geometry}
+
+% ---------------------------------------------------------------------------
+% Espacamento 1,5 (ABNT)
+% ---------------------------------------------------------------------------
+\onehalfspacing
+
+% ---------------------------------------------------------------------------
+% Recuo de paragrafo ABNT: 1,25 cm
+% ---------------------------------------------------------------------------
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0.2cm}
+
+% ---------------------------------------------------------------------------
+% Paginacao: superior a direita (ABNT)
+% ---------------------------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\fancypagestyle{plain}{%
+    \fancyhf{}%
+    \fancyhead[R]{\thepage}%
+    \renewcommand{\headrulewidth}{0pt}%
+}
+
+% ---------------------------------------------------------------------------
+% Formatacao dos titulos (ABNT)
+% Capitulo: MAIUSCULAS, negrito, tamanho 12
+% Secao: minusculas, negrito, tamanho 12
+% ---------------------------------------------------------------------------
+\makeatletter
+% Capitulo numerado
+\renewcommand{\@makechapterhead}[1]{%
+    \noindent
+    {\normalfont\normalsize\bfseries
+    \thechapter\hspace{0.5em}\MakeUppercase{#1}}%
+    \par\vspace{1.5\baselineskip}%
+}
+% Capitulo nao numerado (Referencias, Anexos, etc.)
+\renewcommand{\@makeschapterhead}[1]{%
+    \begin{center}
+    {\normalfont\normalsize\bfseries\MakeUppercase{#1}}%
+    \end{center}
+    \par\vspace{1.5\baselineskip}%
+}
+% Secao: negrito, sem maiusculas
+\renewcommand{\section}{\@startsection{section}{1}{0pt}%
+    {\baselineskip}{0.5\baselineskip}%
+    {\normalfont\normalsize\bfseries}}
+
+% Subsecao: sem negrito
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0pt}%
+    {\baselineskip}{0.5\baselineskip}%
+    {\normalfont\normalsize}}
+\makeatother
+
+% ---------------------------------------------------------------------------
+% Legendas de figuras e tabelas (ABNT)
+% ---------------------------------------------------------------------------
+\captionsetup{
+    font=small,
+    labelfont=bf,
+    justification=centering,
+    singlelinecheck=false,
+    format=hang
+}
+
+% ---------------------------------------------------------------------------
+% Ambiente de citacao longa (ABNT)
+% Recuo de 4cm, fonte 10pt, espacamento simples
+% ---------------------------------------------------------------------------
+\newenvironment{citacao}{%
+    \begin{list}{}{%
+        \setlength{\leftmargin}{4cm}%
+        \setlength{\rightmargin}{0cm}%
+        \setlength{\parsep}{0pt}%
+        \setlength{\itemsep}{0pt}%
+        \small%
+        \singlespacing%
+    }%
+    \item[]%
+}{%
+    \end{list}%
+}
+
+% ---------------------------------------------------------------------------
+% Links
+% ---------------------------------------------------------------------------
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=black,
+    filecolor=black,
+    urlcolor=blue,
+    bookmarksdepth=4,
+    pdfcreator={LaTeX}
+}
+
+\endinput
