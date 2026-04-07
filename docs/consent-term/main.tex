@@ -1,0 +1,56 @@
+% =============================================================================
+% Termo de Consentimento Livre e Esclarecido — Projeto Integrador UNIVESP
+% =============================================================================
+\documentclass[
+    12pt,
+    a4paper,
+    oneside
+]{report}
+
+\usepackage{univesp-abnt}
+\geometry{top=1.5cm, bottom=1.5cm, left=2.5cm, right=2.5cm}
+
+% ── Pacotes adicionais ──────────────────────────────────────────────────────
+\usepackage{amssymb}       % \square para checkboxes
+
+% ── Metadata (edite aqui) ────────────────────────────────────────────────────
+\newcommand{\docobjetivo}{%
+    Evoluir o sistema ``Leciona'' com deploy contínuo em nuvem, garantindo a
+    integridade da alocação de horários via testes automatizados. Além disso,
+    implementar uma API RESTful para permitir a descentralização do consumo de
+    dados de horários e faltas por parte dos professores e gestão,
+    possibilitando um uso mais eficiente e consistente por parte dos usuários.%
+}
+\newcommand{\docresponsavel}{%
+    Allan Di Pace Schmidt, Alysson Alcantara, Anderson de Souza Pereira,
+    Mariana Luisa de Faria Santos, Guilherme Cardoso de Almeida, Luiz Felipe
+    Amaral de Almeida, Whedja Silva Cavalcante --- Orientadora: Laís de Ponte%
+}
+\newcommand{\doctitulo}{Leciona: Plataforma Cloud de Gestão Escolar e API}
+\newcommand{\docbusca}{%
+    investigar como garantir a alta disponibilidade, integridade de dados e
+    facilidade de integração na alocação de substituições emergenciais de
+    professores na Escola Municipal Patrícia Viviani%
+}
+\newcommand{\docbeneficio}{%
+    o participante contribuirá para o aprimoramento de uma ferramenta
+    tecnológica que poderá beneficiar diretamente a gestão escolar e a
+    comunidade da instituição%
+}
+\newcommand{\doccontato}{%
+    Alysson Alcantara --- e-mail e telefone do responsável pelo grupo%
+}
+\newcommand{\doccidade}{São Sebastião -- SP}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{document}
+\selectlanguage{brazil}
+\frenchspacing
+\pagestyle{empty}
+\singlespacing
+\setlength{\parskip}{3pt}
+\setlength{\parindent}{0pt}
+
+\input{content/term}
+
+\end{document}
