@@ -14,37 +14,72 @@
 \newcommand{\doctitulo}{Título do trabalho (Frase curta que sintetize o foco do trabalho)}
 \newcommand{\docautores}{Nome dos integrantes}
 \newcommand{\doccidade}{Cidade}
-\newcommand{\docano}{2026}
-\newcommand{\doccurso}{Nome do curso}
-\newcommand{\doctutor}{Nome do Tutor}
+\newcommand{\docano}{ano}
+\newcommand{\doccurso}{(incluir seu curso)}
+\newcommand{\doctutor}{(Nome do Tutor)}
+\newcommand{\docpolo}{(nome)}
 \newcommand{\docpaginas}{00}
+\newcommand{\docpalavraschave}{Palavra 1; Palavra 2; Palavra 3; Palavra 4; Palavra 5}
+% ─────────────────────────────────────────────────────────────────────────────
+
+% ── Comandos auxiliares ─────────────────────────────────────────────────────
+\makeatletter
+% Sumario: pontos preenchendo ate o numero da pagina (capitulos)
+\renewcommand*\l@chapter[2]{%
+  \ifnum \c@tocdepth >\m@ne
+    \addpenalty{-\@highpenalty}%
+    \vskip 0.8em \@plus\p@
+    \setlength\@tempdima{1.5em}%
+    \begingroup
+      \parindent \z@ \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      \leavevmode \bfseries
+      \advance\leftskip\@tempdima
+      \hskip -\leftskip
+      #1\nobreak\normalfont\leaders\hbox{$\m@th
+        \mkern \@dotsep mu\hbox{.}\mkern \@dotsep
+        mu$}\hfill\nobreak\hb@xt@\@pnumwidth{\hss\bfseries #2}\par
+      \penalty\@highpenalty
+    \endgroup
+  \fi}
+
+% Atalho para imprimir conteudo do sumario sem cabecalho
+\newcommand{\imprimirsumario}{\@starttoc{toc}}
+\makeatother
+
+% Capitulo nao numerado alinhado a esquerda (pos-textual)
+\newcommand{\capitulopostext}[1]{%
+  \clearpage
+  \thispagestyle{plain}%
+  \phantomsection
+  \addcontentsline{toc}{chapter}{#1}%
+  \noindent{\normalfont\normalsize\bfseries #1}%
+  \par\vspace{1.5\baselineskip}%
+}
 % ─────────────────────────────────────────────────────────────────────────────
 
 \begin{document}
 \selectlanguage{brazil}
 \frenchspacing
 
-% Pré-textuais
-\input{content/cover}
-\input{content/abstract}
+% ── Elementos pré-textuais (sem numeração visível) ──────────────────────────
+\pagestyle{empty}
 
-\clearpage
-\listoffigures
+\input{content/capa}
+\input{content/folha-rosto}
+\input{content/ficha-resumo}
+\input{content/listas}
+\input{content/sumario}
 
-\clearpage
-\listoftables
+% ── Elementos textuais (numeração arábica) ──────────────────────────────────
+\pagestyle{fancy}
 
-\clearpage
-\tableofcontents
+\input{content/introducao}
+\input{content/desenvolvimento}
 
-% Textuais
-\clearpage
-\pagenumbering{arabic}
-\input{content/introduction}
-\input{content/development}
-
-% Pós-textuais
-\input{content/references}
-\input{content/appendices}
+% ── Elementos pós-textuais ──────────────────────────────────────────────────
+\input{content/referencias}
+\input{content/anexos}
+\input{content/apendices}
 
 \end{document}
