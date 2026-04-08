@@ -232,43 +232,39 @@ A implementação produziu um sistema funcional que cobre os requisitos definido
 
 \textbf{Dashboard analítico.} A view \texttt{DashboardView}, acessível em \texttt{/statistics/}, apresenta três gráficos construídos com Chart.js 4.x e cards com contadores de professores, turmas e segmentos cadastrados. O primeiro gráfico é uma linha temporal que compara o número de ausências registradas com o número de substituições realizadas nos últimos seis meses. Os dados são obtidos por meio de consultas agregadas que utilizam \texttt{ExtractMonth} para agrupar os registros por mês, e são servidos como JSON pelo endpoint \texttt{/chartJSON/} (uma view baseada em \texttt{BaseLineChartView}). O segundo gráfico é um gráfico de barras que mostra a distribuição de ausências por dia da semana (segunda a sexta), utilizando \texttt{ExtractIsoWeekDay} para extrair o dia da data de início de cada ausência. O terceiro gráfico é um \textit{doughnut} que exibe a distribuição de turmas por período escolar (manhã, tarde, noite, integral), permitindo que a coordenação visualize rapidamente o equilíbrio da oferta entre turnos.
 
-% NOTA: Inserir screenshot do dashboard aqui.
-% \begin{figure}[H]
-% \centering
-% \includegraphics[width=0.9\textwidth]{images/dashboard.png}
-% \caption{Dashboard analítico do sistema Leciona com gráficos de ausências e substituições}
-% \label{fig:dashboard}
-% \end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{images/dashboard.png}
+\caption{Dashboard analítico do sistema Leciona com gráficos de ausências e substituições}
+\label{fig:dashboard}
+\end{figure}
 
 \textbf{Painel administrativo.} O painel administrativo do Django, personalizado com o tema Jazzmin (baseado em AdminLTE 3 e Bootstrap 4), oferece interfaces de cadastro, edição e consulta para todas as entidades do sistema: professores, disciplinas, turmas, segmentos, períodos, justificativas, horários, ausências, substituições e comunicados. Cada entidade possui uma classe \texttt{ModelAdmin} registrada, com configuração de campos exibidos em lista (\texttt{list\_display}), filtros laterais (\texttt{list\_filter}) e ações customizadas. A navegação pelo painel é intuitiva, com menus laterais organizados por módulo e suporte a busca rápida.
 
-% NOTA: Inserir screenshot do painel administrativo aqui.
-% \begin{figure}[H]
-% \centering
-% \includegraphics[width=0.9\textwidth]{images/admin-panel.png}
-% \caption{Painel administrativo do Leciona com tema Jazzmin}
-% \label{fig:admin}
-% \end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{images/admin-panel.png}
+\caption{Painel administrativo do Leciona com tema Jazzmin}
+\label{fig:admin}
+\end{figure}
 
 \textbf{Exportação de relatórios em PDF.} A funcionalidade de exportação em PDF foi implementada como uma ação customizada do Django Admin, disponível para todos os modelos registrados. A ação utiliza a biblioteca ReportLab para gerar documentos em formato A4 com cabeçalho institucional (logo do sistema e título), tabela com os dados selecionados, contagem total de registros e rodapé com data de emissão e nome do usuário que gerou o relatório. O administrador seleciona os registros desejados na lista, escolhe a ação ``Export to PDF'' e recebe o download do arquivo. Essa funcionalidade atende à demanda da secretaria por relatórios impressos de professores, turmas e ausências.
 
-% NOTA: Inserir screenshot de um PDF exportado aqui.
-% \begin{figure}[H]
-% \centering
-% \includegraphics[width=0.85\textwidth]{images/pdf-export.png}
-% \caption{Exemplo de relatório em PDF gerado pelo sistema Leciona}
-% \label{fig:pdf}
-% \end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{images/teacher-list.png}
+\caption{Lista de professores cadastrados no painel administrativo do Leciona}
+\label{fig:teachers}
+\end{figure}
 
 \textbf{Gestão de horários com validação de conflitos.} O cadastro de horários pelo painel administrativo passa por validação em duas camadas. Na primeira camada (aplicação), o método \texttt{clean()} do modelo Schedule verifica que o horário de início é anterior ao horário de término e que o professor está habilitado a lecionar a disciplina indicada. Na segunda camada (banco de dados), as \texttt{UniqueConstraint} impedem a inserção de registros que gerariam choque de professor ou choque de turma. Quando uma tentativa de inserção viola alguma dessas restrições, o Django exibe uma mensagem de erro descritiva no formulário, sem que o registro inválido seja persistido.
 
-% NOTA: Inserir screenshot do cadastro de horários aqui.
-% \begin{figure}[H]
-% \centering
-% \includegraphics[width=0.9\textwidth]{images/schedule-management.png}
-% \caption{Formulário de cadastro de horários com validação de conflitos}
-% \label{fig:schedule}
-% \end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{images/schedule-management.png}
+\caption{Lista de horários cadastrados com filtros por dia da semana, turma, disciplina e professor}
+\label{fig:schedule}
+\end{figure}
 
 \textbf{Conteinerização com Docker.} O ambiente completo do Leciona pode ser iniciado com o comando \texttt{docker-compose up -d --build}. O Docker Compose orquestra dois serviços: \texttt{db} (imagem \texttt{postgres:15-alpine}, porta 5433, volume persistente) e \texttt{web} (imagem construída a partir do Dockerfile do projeto, porta 8080). Em desenvolvimento, o comando do serviço \texttt{web} é sobrescrito para utilizar o servidor de desenvolvimento do Django (\texttt{runserver}); em produção, o Dockerfile define o Gunicorn com três \textit{workers} como servidor padrão. O \textit{seed} de dados é executado dentro do contêiner com \texttt{docker-compose exec web python manage.py seed\_db}.
 
