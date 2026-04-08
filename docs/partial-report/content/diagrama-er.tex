@@ -1,195 +1,224 @@
 % ── Diagrama Entidade-Relacionamento (TikZ vetorial) ────────────────────────
 %
-% Layout em grade 4 colunas × 3 linhas, com setas ortogonais roteadas
-% por caminhos livres para evitar sobreposição com texto.
+% Layout: 3 colunas com corredores de 2 cm entre elas.
+%
+%   Coluna 1 (x=0)       Corredor 1       Coluna 2 (x=5)       Corredor 2       Coluna 3 (x=10)
+%   x: -1.5 a 1.5        x: 1.5 a 3.5     x: 3.5 a 6.5         x: 6.5 a 8.5     x: 8.5 a 11.5
+%
+% Regra: TODAS as setas entre colunas usam apenas segmentos horizontais
+% e verticais, trafegando exclusivamente pelos corredores.
 %
 \definecolor{coreBlue}{HTML}{3B82F6}
 \definecolor{schedGreen}{HTML}{22C55E}
 \definecolor{attRed}{HTML}{EF4444}
 \definecolor{commAmber}{HTML}{F59E0B}
-\definecolor{coreBg}{HTML}{EFF6FF}
-\definecolor{schedBg}{HTML}{F0FDF4}
-\definecolor{attBg}{HTML}{FEF2F2}
-\definecolor{commBg}{HTML}{FFFBEB}
 
 \tikzset{
-  erd entity/.style={
-    rectangle, draw=#1, line width=0.7pt, fill=#1!4,
-    inner sep=0pt, outer sep=0pt, minimum width=3.4cm,
-  },
   erd head/.style={
     rectangle, fill=#1, text=white, font=\bfseries\scriptsize,
-    minimum width=3.4cm, minimum height=0.45cm, inner sep=2pt, anchor=north,
+    minimum width=3cm, minimum height=0.45cm, inner sep=2pt, anchor=north,
   },
   erd fields/.style={
-    rectangle, draw=#1, fill=#1!4, line width=0.7pt,
-    minimum width=3.4cm, inner sep=3pt, anchor=north,
-    font=\tiny, text width=3.1cm, align=left,
+    rectangle, draw=#1, fill=#1!4, line width=0.6pt,
+    minimum width=3cm, inner sep=3pt, anchor=north,
+    font=\tiny, text width=2.7cm, align=left,
   },
-  fk arrow/.style={-{Stealth[length=4pt, width=3pt]}, semithick, #1!70!black},
-  m2m arrow/.style={{Stealth[length=4pt, width=3pt]}-{Stealth[length=4pt, width=3pt]}, semithick, #1!70!black, dashed},
-  mod label/.style={font=\scriptsize\bfseries\itshape, text=#1},
+  fkarrow/.style={-{Stealth[length=4pt, width=3pt]}, semithick, #1!60!black},
+  m2marrow/.style={{Stealth[length=4pt, width=3pt]}-{Stealth[length=4pt, width=3pt]}, semithick, #1!60!black, dashed},
+  modlabel/.style={font=\scriptsize\bfseries\itshape, text=#1!80!black},
 }
 
 \newcommand{\ent}[5]{% name, color, title, fields, (x,y)
   \node[erd head=#2] (#1H) at (#5) {#3};
-  \node[erd fields=#2, below=-0.7pt of #1H] (#1B) {#4};
+  \node[erd fields=#2, below=-0.6pt of #1H] (#1B) {#4};
   \node[fit=(#1H)(#1B), inner sep=0pt] (#1) {};
 }
 
-\begin{tikzpicture}[remember picture, node distance=0.6cm and 0.8cm]
+\begin{tikzpicture}[remember picture]
 
 % ════════════════════════════════════════════════════════════════════
-% ENTIDADES — dispostas em grade
+% COLUNA 1 (x = 0): entidades de referência do core
 % ════════════════════════════════════════════════════════════════════
-
-% ── Coluna 1: core (esquerda) ──────────────────────────────────────
-\ent{CG}{coreBlue}{ClassGroup}{%
-  \underline{id}\enspace BigAutoField (PK)\\
-  name\enspace CharField(200)\\
-  segment\enspace FK $\to$ SchoolSegment\\
-  period\enspace FK $\to$ SchoolPeriod%
-}{0,0}
 
 \ent{SS}{coreBlue}{SchoolSegment}{%
-  \underline{id}\enspace BigAutoField (PK)\\
-  name\enspace CharField(200)%
-}{0,-2.4}
+  \underline{id} : BigAutoField (PK)\\
+  name : CharField(200)%
+}{0, 0}
+
+\ent{CG}{coreBlue}{ClassGroup}{%
+  \underline{id} : BigAutoField (PK)\\
+  name : CharField(200)\\
+  segment : FK $\to$ SchoolSegment\\
+  period : FK $\to$ SchoolPeriod%
+}{0, -1.6}
 
 \ent{SP}{coreBlue}{SchoolPeriod}{%
-  \underline{id}\enspace BigAutoField (PK)\\
-  name\enspace CharField(200)%
-}{0,-3.9}
-
-% ── Coluna 2: core (centro) ───────────────────────────────────────
-\ent{T}{coreBlue}{Teacher}{%
-  \underline{id}\enspace BigAutoField (PK)\\
-  name\enspace CharField(200)\\
-  phone\enspace CharField(17)\\
-  is\_substitute\enspace BooleanField\\
-  subjects\enspace M2M $\to$ Subject%
-}{4.4,0}
+  \underline{id} : BigAutoField (PK)\\
+  name : CharField(200)%
+}{0, -3.8}
 
 \ent{SU}{coreBlue}{Subject}{%
-  \underline{id}\enspace BigAutoField (PK)\\
-  name\enspace CharField(200)%
-}{4.4,-2.7}
+  \underline{id} : BigAutoField (PK)\\
+  name : CharField(200)%
+}{0, -5.4}
 
 \ent{J}{coreBlue}{Justification}{%
-  \underline{id}\enspace BigAutoField (PK)\\
-  name\enspace CharField(200)%
-}{4.4,-4.1}
+  \underline{id} : BigAutoField (PK)\\
+  name : CharField(200)%
+}{0, -7}
 
-% ── Coluna 3: schedule ────────────────────────────────────────────
+% ════════════════════════════════════════════════════════════════════
+% COLUNA 2 (x = 5): Teacher, Schedule, Message
+% ════════════════════════════════════════════════════════════════════
+
+\ent{T}{coreBlue}{Teacher}{%
+  \underline{id} : BigAutoField (PK)\\
+  name : CharField(200)\\
+  phone : CharField(17)\\
+  is\_substitute : BooleanField\\
+  subjects : M2M $\to$ Subject%
+}{5, 0}
+
 \ent{SC}{schedGreen}{Schedule}{%
-  \underline{id}\enspace BigAutoField (PK)\\
-  day\_of\_week\enspace CharField(20)\\
-  class\_group\enspace FK $\to$ ClassGroup\\
-  teacher\enspace FK $\to$ Teacher\\
-  subject\enspace FK $\to$ Subject\\
-  start\_time\enspace TimeField\\
-  end\_time\enspace TimeField\\[1pt]
+  \underline{id} : BigAutoField (PK)\\
+  day\_of\_week : CharField(20)\\
+  class\_group : FK $\to$ ClassGroup\\
+  teacher : FK $\to$ Teacher\\
+  subject : FK $\to$ Subject\\
+  start\_time : TimeField\\
+  end\_time : TimeField\\[1pt]
   {\itshape UC: teacher + day + start}\\
   {\itshape UC: class + day + start}%
-}{8.8,0}
+}{5, -3}
 
-% ── Coluna 4: attendance ──────────────────────────────────────────
+\ent{M}{commAmber}{Message}{%
+  \underline{id} : BigAutoField (PK)\\
+  message\_type : CharField(20)\\
+  date : DateField\\
+  description : TextField\\
+  image : ImageField (opcional)\\
+  class\_groups : M2M $\to$ ClassGroup\\
+  teachers : M2M $\to$ Teacher%
+}{5, -7}
+
+% ════════════════════════════════════════════════════════════════════
+% COLUNA 3 (x = 10): attendance
+% ════════════════════════════════════════════════════════════════════
+
 \ent{TA}{attRed}{TeacherAbsence}{%
-  \underline{id}\enspace BigAutoField (PK)\\
-  start\_date\enspace DateField (idx)\\
-  end\_date\enspace DateField (idx)\\
-  teacher\enspace FK $\to$ Teacher\\
-  justification\enspace FK $\to$ Justification%
-}{13.2,0}
+  \underline{id} : BigAutoField (PK)\\
+  start\_date : DateField (idx)\\
+  end\_date : DateField (idx)\\
+  teacher : FK $\to$ Teacher\\
+  justification : FK $\to$ Justification%
+}{10, 0}
 
 \ent{TS}{attRed}{TeacherSubstitution}{%
-  \underline{id}\enspace BigAutoField (PK)\\
-  start\_date\enspace DateField (idx)\\
-  end\_date\enspace DateField (idx)\\
-  absent\_teacher\enspace FK $\to$ Teacher\\
-  substitute\_teacher\enspace FK $\to$ Teacher%
-}{13.2,-2.8}
-
-% ── Coluna 1, linha 3: communication ─────────────────────────────
-\ent{M}{commAmber}{Message}{%
-  \underline{id}\enspace BigAutoField (PK)\\
-  message\_type\enspace CharField(20)\\
-  date\enspace DateField\\
-  description\enspace TextField\\
-  image\enspace ImageField (opcional)\\
-  class\_groups\enspace M2M $\to$ ClassGroup\\
-  teachers\enspace M2M $\to$ Teacher%
-}{0,-5.8}
+  \underline{id} : BigAutoField (PK)\\
+  start\_date : DateField (idx)\\
+  end\_date : DateField (idx)\\
+  absent\_teacher : FK $\to$ Teacher\\
+  substitute\_teacher : FK $\to$ Teacher%
+}{10, -2.8}
 
 % ════════════════════════════════════════════════════════════════════
-% RELACIONAMENTOS — rotas ortogonais sem cruzar texto
+% SETAS — apenas segmentos H e V, roteando pelos corredores
+%
+% Corredor 1 (entre col 1 e col 2): canais em x = 2.0, 2.4, 2.8, 3.2
+% Corredor 2 (entre col 2 e col 3): canais em x = 7.0, 7.5, 8.0
+% Corredor externo direito: x = 12
 % ════════════════════════════════════════════════════════════════════
 
-% ClassGroup → SchoolSegment (reta vertical)
-\draw[fk arrow=coreBlue]
-  ([xshift=-4pt]CGB.south) -- ([xshift=-4pt]SSH.north);
+% ── Dentro da coluna 1 (vertical curta) ────────────────────────────
 
-% ClassGroup → SchoolPeriod (desvio pela esquerda)
-\draw[fk arrow=coreBlue]
-  ([xshift=4pt]CGB.south) -- ++(0,-0.12)
-  -| (-1.3,-3.9) -- (SPH.west);
+% 1. ClassGroup → SchoolSegment
+\draw[fkarrow=coreBlue] (CGH.north) -- (SSB.south);
 
-% Teacher ↔ Subject (M2M vertical)
-\draw[m2m arrow=coreBlue]
-  (TB.south) -- (SUH.north);
+% 2. ClassGroup → SchoolPeriod
+\draw[fkarrow=coreBlue] (CGB.south) -- (SPH.north);
 
-% Schedule → ClassGroup (rota acima das entidades)
-\draw[fk arrow=schedGreen]
-  (SCH.north) -- ++(0,0.35) -| (CGH.north);
+% ── Dentro da coluna 2 (vertical curta) ────────────────────────────
 
-% Schedule → Teacher (horizontal direta)
-\draw[fk arrow=schedGreen]
-  ([yshift=-2pt]SC.west) -- ([yshift=-2pt]T.east);
+% 3. Schedule → Teacher
+\draw[fkarrow=schedGreen] (SCH.north) -- (TB.south);
 
-% Schedule → Subject (rota por baixo)
-\draw[fk arrow=schedGreen]
-  (SCB.south) -- ++(0,-0.2) -| (6.6,-2.7) -- (SU.east);
+% ── Pelo corredor 1: col 2 → col 1 ────────────────────────────────
 
-% TeacherAbsence → Teacher (rota acima)
-\draw[fk arrow=attRed]
-  (TAH.north) -- ++(0,0.2) -- (4.4,0.55) -- (TH.north);
+% 4. Teacher ↔ Subject (M2M) — canal x = 2.5
+\draw[m2marrow=coreBlue]
+  ([yshift=2pt]T.west) -- (2.5, -0.7)
+  -- (2.5, -5.7)
+  -- ([yshift=2pt]SU.east);
 
-% TeacherAbsence → Justification (rota por baixo)
-\draw[fk arrow=attRed]
-  (TAB.south) -- ++(0,-0.15) -- (6.6,-2.4) -- ++(0,-1.7) -- (JB.east);
+% 5. Schedule → ClassGroup — canal x = 2.0
+\draw[fkarrow=schedGreen]
+  ([yshift=6pt]SC.west) -- (2.0, -3.8)
+  -- (2.0, -2.4)
+  -- ([yshift=-2pt]CG.east);
 
-% TeacherSubstitution → Teacher (duas FKs, rota inferior)
-\draw[fk arrow=attRed]
-  (TS.west) -- (4.4,-3.6) -- ([yshift=2pt]TB.south east);
+% 6. Schedule → Subject — canal x = 2.8
+\draw[fkarrow=schedGreen]
+  ([yshift=-6pt]SC.west) -- (2.8, -4.8)
+  -- (2.8, -5.9)
+  -- ([yshift=-2pt]SU.east);
 
-% Message ↔ ClassGroup (M2M vertical)
-\draw[m2m arrow=commAmber]
-  (MH.north) -- (SPB.south);
+% 7. Message ↔ ClassGroup (M2M) — canal x = 3.2
+\draw[m2marrow=commAmber]
+  ([yshift=6pt]M.west) -- (3.2, -7.2)
+  -- (3.2, -2.8)
+  -- ([yshift=-6pt]CG.east);
 
-% Message ↔ Teacher (M2M diagonal limpa)
-\draw[m2m arrow=commAmber]
-  (M.east) -- ++(1.0,0) -- (4.4,-5.0) -- ([xshift=4pt]JB.south);
+% ── Pelo corredor 2: col 3 → col 2 ────────────────────────────────
+
+% 8. TeacherAbsence → Teacher — horizontal direta y = -0.8
+\draw[fkarrow=attRed]
+  (TA.west) -- (T.east);
+
+% 9. TeacherSubstitution → Teacher — canal x = 7.2
+\draw[fkarrow=attRed]
+  (TS.west) -- (7.2, -3.6)
+  -- (7.2, -1.3)
+  -- ([yshift=-6pt]T.east);
+
+% ── Pelo corredor 2: col 3 → col 2 (M2M) ─────────────────────────
+
+% 10. Message ↔ Teacher (M2M) — canal x = 7.8
+\draw[m2marrow=commAmber]
+  ([yshift=-2pt]M.east) -- (7.8, -8.2)
+  -- (7.8, -1.0)
+  -- ([yshift=-2pt]T.east);
+
+% ── Rota longa: col 3 → col 1 (pelo corredor externo) ─────────────
+
+% 11. TeacherAbsence → Justification — contorna por fora (x=12, y=-6.5)
+\draw[fkarrow=attRed]
+  ([yshift=-2pt]TA.east) -- (12, -0.9)
+  -- (12, -6.5)
+  -- (1.5, -6.5)
+  -- (1.5, -7.3)
+  -- ([yshift=2pt]J.east);
 
 % ════════════════════════════════════════════════════════════════════
 % LABELS DE MÓDULO
 % ════════════════════════════════════════════════════════════════════
 
-\node[mod label=coreBlue]   at (2.2, 0.75) {core};
-\node[mod label=schedGreen] at (8.8, 0.75) {schedule};
-\node[mod label=attRed]     at (13.2, 0.75) {attendance};
-\node[mod label=commAmber]  at (0, -5.1) {communication};
+\node[modlabel=coreBlue]   at (0, 0.6) {core};
+\node[modlabel=coreBlue]   at (5, 0.6) {core};
+\node[modlabel=schedGreen] at (5, -2.5) {schedule};
+\node[modlabel=commAmber]  at (5, -6.5) {communication};
+\node[modlabel=attRed]     at (10, 0.6) {attendance};
 
 % ════════════════════════════════════════════════════════════════════
 % LEGENDA
 % ════════════════════════════════════════════════════════════════════
 
-\node[anchor=north west, font=\tiny, text width=5cm] at (8.8,-5.3) {
-  \tikz[baseline=-0.5ex]\draw[fk arrow=black] (0,0) -- (0.5,0);
-  \enspace Chave estrangeira (FK) \quad
-  \tikz[baseline=-0.5ex]\draw[m2m arrow=black] (0,0) -- (0.5,0);
-  \enspace Relacionamento M2M\\
-  \textit{UC}\enspace UniqueConstraint \quad
-  \textit{idx}\enspace Campo indexado
+\node[anchor=north west, font=\tiny, inner sep=2pt] at (8.5, -5.5) {%
+  \begin{tabular}{@{}r@{\enspace}l@{}}
+  \tikz[baseline=-0.5ex]\draw[fkarrow=black] (0,0) -- (0.5,0); & Chave estrangeira (FK) \\[2pt]
+  \tikz[baseline=-0.5ex]\draw[m2marrow=black] (0,0) -- (0.5,0); & Relacionamento M2M \\[2pt]
+  \textit{UC} & UniqueConstraint \\[2pt]
+  \textit{idx} & Campo indexado (db\_index) \\
+  \end{tabular}%
 };
 
 \end{tikzpicture}
