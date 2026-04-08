@@ -1,0 +1,195 @@
+% ── Diagrama Entidade-Relacionamento (TikZ vetorial) ────────────────────────
+%
+% Layout em grade 4 colunas × 3 linhas, com setas ortogonais roteadas
+% por caminhos livres para evitar sobreposição com texto.
+%
+\definecolor{coreBlue}{HTML}{3B82F6}
+\definecolor{schedGreen}{HTML}{22C55E}
+\definecolor{attRed}{HTML}{EF4444}
+\definecolor{commAmber}{HTML}{F59E0B}
+\definecolor{coreBg}{HTML}{EFF6FF}
+\definecolor{schedBg}{HTML}{F0FDF4}
+\definecolor{attBg}{HTML}{FEF2F2}
+\definecolor{commBg}{HTML}{FFFBEB}
+
+\tikzset{
+  erd entity/.style={
+    rectangle, draw=#1, line width=0.7pt, fill=#1!4,
+    inner sep=0pt, outer sep=0pt, minimum width=3.4cm,
+  },
+  erd head/.style={
+    rectangle, fill=#1, text=white, font=\bfseries\scriptsize,
+    minimum width=3.4cm, minimum height=0.45cm, inner sep=2pt, anchor=north,
+  },
+  erd fields/.style={
+    rectangle, draw=#1, fill=#1!4, line width=0.7pt,
+    minimum width=3.4cm, inner sep=3pt, anchor=north,
+    font=\tiny, text width=3.1cm, align=left,
+  },
+  fk arrow/.style={-{Stealth[length=4pt, width=3pt]}, semithick, #1!70!black},
+  m2m arrow/.style={{Stealth[length=4pt, width=3pt]}-{Stealth[length=4pt, width=3pt]}, semithick, #1!70!black, dashed},
+  mod label/.style={font=\scriptsize\bfseries\itshape, text=#1},
+}
+
+\newcommand{\ent}[5]{% name, color, title, fields, (x,y)
+  \node[erd head=#2] (#1H) at (#5) {#3};
+  \node[erd fields=#2, below=-0.7pt of #1H] (#1B) {#4};
+  \node[fit=(#1H)(#1B), inner sep=0pt] (#1) {};
+}
+
+\begin{tikzpicture}[remember picture, node distance=0.6cm and 0.8cm]
+
+% ════════════════════════════════════════════════════════════════════
+% ENTIDADES — dispostas em grade
+% ════════════════════════════════════════════════════════════════════
+
+% ── Coluna 1: core (esquerda) ──────────────────────────────────────
+\ent{CG}{coreBlue}{ClassGroup}{%
+  \underline{id}\enspace BigAutoField (PK)\\
+  name\enspace CharField(200)\\
+  segment\enspace FK $\to$ SchoolSegment\\
+  period\enspace FK $\to$ SchoolPeriod%
+}{0,0}
+
+\ent{SS}{coreBlue}{SchoolSegment}{%
+  \underline{id}\enspace BigAutoField (PK)\\
+  name\enspace CharField(200)%
+}{0,-2.4}
+
+\ent{SP}{coreBlue}{SchoolPeriod}{%
+  \underline{id}\enspace BigAutoField (PK)\\
+  name\enspace CharField(200)%
+}{0,-3.9}
+
+% ── Coluna 2: core (centro) ───────────────────────────────────────
+\ent{T}{coreBlue}{Teacher}{%
+  \underline{id}\enspace BigAutoField (PK)\\
+  name\enspace CharField(200)\\
+  phone\enspace CharField(17)\\
+  is\_substitute\enspace BooleanField\\
+  subjects\enspace M2M $\to$ Subject%
+}{4.4,0}
+
+\ent{SU}{coreBlue}{Subject}{%
+  \underline{id}\enspace BigAutoField (PK)\\
+  name\enspace CharField(200)%
+}{4.4,-2.7}
+
+\ent{J}{coreBlue}{Justification}{%
+  \underline{id}\enspace BigAutoField (PK)\\
+  name\enspace CharField(200)%
+}{4.4,-4.1}
+
+% ── Coluna 3: schedule ────────────────────────────────────────────
+\ent{SC}{schedGreen}{Schedule}{%
+  \underline{id}\enspace BigAutoField (PK)\\
+  day\_of\_week\enspace CharField(20)\\
+  class\_group\enspace FK $\to$ ClassGroup\\
+  teacher\enspace FK $\to$ Teacher\\
+  subject\enspace FK $\to$ Subject\\
+  start\_time\enspace TimeField\\
+  end\_time\enspace TimeField\\[1pt]
+  {\itshape UC: teacher + day + start}\\
+  {\itshape UC: class + day + start}%
+}{8.8,0}
+
+% ── Coluna 4: attendance ──────────────────────────────────────────
+\ent{TA}{attRed}{TeacherAbsence}{%
+  \underline{id}\enspace BigAutoField (PK)\\
+  start\_date\enspace DateField (idx)\\
+  end\_date\enspace DateField (idx)\\
+  teacher\enspace FK $\to$ Teacher\\
+  justification\enspace FK $\to$ Justification%
+}{13.2,0}
+
+\ent{TS}{attRed}{TeacherSubstitution}{%
+  \underline{id}\enspace BigAutoField (PK)\\
+  start\_date\enspace DateField (idx)\\
+  end\_date\enspace DateField (idx)\\
+  absent\_teacher\enspace FK $\to$ Teacher\\
+  substitute\_teacher\enspace FK $\to$ Teacher%
+}{13.2,-2.8}
+
+% ── Coluna 1, linha 3: communication ─────────────────────────────
+\ent{M}{commAmber}{Message}{%
+  \underline{id}\enspace BigAutoField (PK)\\
+  message\_type\enspace CharField(20)\\
+  date\enspace DateField\\
+  description\enspace TextField\\
+  image\enspace ImageField (opcional)\\
+  class\_groups\enspace M2M $\to$ ClassGroup\\
+  teachers\enspace M2M $\to$ Teacher%
+}{0,-5.8}
+
+% ════════════════════════════════════════════════════════════════════
+% RELACIONAMENTOS — rotas ortogonais sem cruzar texto
+% ════════════════════════════════════════════════════════════════════
+
+% ClassGroup → SchoolSegment (reta vertical)
+\draw[fk arrow=coreBlue]
+  ([xshift=-4pt]CGB.south) -- ([xshift=-4pt]SSH.north);
+
+% ClassGroup → SchoolPeriod (desvio pela esquerda)
+\draw[fk arrow=coreBlue]
+  ([xshift=4pt]CGB.south) -- ++(0,-0.12)
+  -| (-1.3,-3.9) -- (SPH.west);
+
+% Teacher ↔ Subject (M2M vertical)
+\draw[m2m arrow=coreBlue]
+  (TB.south) -- (SUH.north);
+
+% Schedule → ClassGroup (rota acima das entidades)
+\draw[fk arrow=schedGreen]
+  (SCH.north) -- ++(0,0.35) -| (CGH.north);
+
+% Schedule → Teacher (horizontal direta)
+\draw[fk arrow=schedGreen]
+  ([yshift=-2pt]SC.west) -- ([yshift=-2pt]T.east);
+
+% Schedule → Subject (rota por baixo)
+\draw[fk arrow=schedGreen]
+  (SCB.south) -- ++(0,-0.2) -| (6.6,-2.7) -- (SU.east);
+
+% TeacherAbsence → Teacher (rota acima)
+\draw[fk arrow=attRed]
+  (TAH.north) -- ++(0,0.2) -- (4.4,0.55) -- (TH.north);
+
+% TeacherAbsence → Justification (rota por baixo)
+\draw[fk arrow=attRed]
+  (TAB.south) -- ++(0,-0.15) -- (6.6,-2.4) -- ++(0,-1.7) -- (JB.east);
+
+% TeacherSubstitution → Teacher (duas FKs, rota inferior)
+\draw[fk arrow=attRed]
+  (TS.west) -- (4.4,-3.6) -- ([yshift=2pt]TB.south east);
+
+% Message ↔ ClassGroup (M2M vertical)
+\draw[m2m arrow=commAmber]
+  (MH.north) -- (SPB.south);
+
+% Message ↔ Teacher (M2M diagonal limpa)
+\draw[m2m arrow=commAmber]
+  (M.east) -- ++(1.0,0) -- (4.4,-5.0) -- ([xshift=4pt]JB.south);
+
+% ════════════════════════════════════════════════════════════════════
+% LABELS DE MÓDULO
+% ════════════════════════════════════════════════════════════════════
+
+\node[mod label=coreBlue]   at (2.2, 0.75) {core};
+\node[mod label=schedGreen] at (8.8, 0.75) {schedule};
+\node[mod label=attRed]     at (13.2, 0.75) {attendance};
+\node[mod label=commAmber]  at (0, -5.1) {communication};
+
+% ════════════════════════════════════════════════════════════════════
+% LEGENDA
+% ════════════════════════════════════════════════════════════════════
+
+\node[anchor=north west, font=\tiny, text width=5cm] at (8.8,-5.3) {
+  \tikz[baseline=-0.5ex]\draw[fk arrow=black] (0,0) -- (0.5,0);
+  \enspace Chave estrangeira (FK) \quad
+  \tikz[baseline=-0.5ex]\draw[m2m arrow=black] (0,0) -- (0.5,0);
+  \enspace Relacionamento M2M\\
+  \textit{UC}\enspace UniqueConstraint \quad
+  \textit{idx}\enspace Campo indexado
+};
+
+\end{tikzpicture}
