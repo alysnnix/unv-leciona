@@ -1,34 +1,16 @@
 % ── 1 Introdução ────────────────────────────────────────────────────────────
 \chapter{INTRODUÇÃO}
 
-A Introdução é a apresentação do tema a ser tratado e deve conter o problema a ser pesquisado.
+A administração de uma escola pública envolve tarefas que vão muito além do pedagógico. Coordenações e secretarias lidam diariamente com matrículas, distribuição de turmas, controle de frequência docente e remanejamento de horários. Entre essas demandas, a gestão de ausências de professores se destaca pela imprevisibilidade: atestados médicos, licenças e afastamentos ocorrem sem aviso prévio e exigem resposta imediata para que turmas não fiquem ociosas. Lück (2009) aponta que a eficácia da gestão escolar depende da capacidade de articular processos administrativos e pedagógicos de forma integrada, o que se torna inviável quando ferramentas adequadas de organização não estão disponíveis.
 
-Ao desenvolver a introdução, o grupo deve explicar o assunto que deseja abordar, de forma a:
+Apesar do avanço da tecnologia em diversas áreas da educação, muitas escolas públicas municipais ainda dependem de planilhas avulsas, cadernos de anotação e comunicação por aplicativos de mensagem para resolver questões operacionais. Moran (2015) argumenta que a incorporação de tecnologias digitais na educação precisa ultrapassar o uso em sala de aula e alcançar também os processos de gestão, possibilitando decisões mais ágeis e fundamentadas em dados. Na prática, a ausência de sistemas informatizados para tarefas administrativas resulta em retrabalho, erros de comunicação e perda de informações relevantes.
 
-\begin{itemize}
-\item Desenvolver o tema
-\item Anunciar a ideia básica
-\item Delimitar o foco da pesquisa
-\item Situar o tema dentro do contexto geral da sua área de trabalho
-\item Descrever as motivações que levaram à escolha do tema
-\item Indicar o objeto do trabalho: o que será estudado?
-\end{itemize}
+Esse cenário se reproduz na Escola Municipal Patrícia Viviani, localizada no bairro Topolândia, em São Sebastião (SP). A escola funciona com múltiplas turmas e turnos, e o controle de substituições de professores é feito manualmente pela secretaria e pela vice-direção. Quando um professor comunica ausência, a equipe administrativa precisa verificar quais horários ficaram descobertos, identificar substitutos disponíveis e reorganizar a grade, tudo isso frequentemente no mesmo dia. Choques de horários, substituições duplicadas e a falta de registro centralizado são problemas recorrentes. A Vice-Diretora Marília Izabel confirmou que a escola não dispõe de nenhum sistema digital voltado a esse tipo de controle, o que torna o processo lento e sujeito a falhas.
 
-O texto do trabalho deve conter a formatação indicada neste documento:
+No semestre anterior, durante o Projeto Integrador II, o grupo desenvolveu um protótipo do sistema Leciona para atender a essa demanda. Construído com o framework Django e banco de dados PostgreSQL, o protótipo permitia o cadastro de professores, disciplinas, turmas e horários, além de registrar ausências e sugerir substituições. No entanto, o sistema funcionava apenas em ambiente local, sem possibilidade de acesso remoto por parte da equipe escolar. Não havia testes automatizados que garantissem a integridade das regras de negócio (como a impossibilidade de alocar um mesmo professor em duas turmas no mesmo horário), e a interface, embora funcional, não oferecia painéis analíticos para apoiar a tomada de decisão da coordenação.
 
-\begin{itemize}
-\item FONTE, TAMANHO E COR: Times New Roman, tamanho 12 para texto, 10 para citações
-de mais de três linhas e de 10 para notas de rodapé; Cor preta.
-\item MARGENS: superior e esquerda de 3cm; inferior e direita de 2cm.
-\item TÍTULOS OU SUBTÍTULOS: alinhados à esquerda, iniciando sempre em uma nova
-página. Todas as letras dos títulos dos capítulos devem ser escritas no canto esquerdo de
-cada página, em negrito e em maiúsculas.
-\item PAGINAÇÃO (números das páginas): Superior à direita, começando na introdução em
-algarismos arábicos (1, 2, 3....).
-\item ESPAÇAMENTO: Todo o texto deve ser digitado em espaço 1,5. Excetuam-se: citações
-longas (com mais de três linhas), notas de rodapé, as Referências Bibliográficas (ou
-Bibliografia) e as legendas de ilustrações e tabelas, que são digitadas com espaçamento
-simples. Os parágrafos devem ser separados por uma linha em branco. Citações com mais
-de três linhas: fonte tamanho 10, espaçamento simples e recuo de 4cm da margem esquerda.
-Notas de rodapé: fonte tamanho 10.
-\end{itemize}
+A continuidade do projeto no Projeto Integrador III se justifica tanto pela demanda real da escola parceira quanto pelo alinhamento com o tema norteador do semestre, que exige desenvolvimento de software web em nuvem com banco de dados, automação por script web (JavaScript), acessibilidade, integração contínua, testes automatizados e fornecimento de API RESTful. Manter o projeto anterior, em vez de iniciar um novo, permite ao grupo aprofundar a solução: corrigir limitações identificadas na primeira versão, incorporar boas práticas de engenharia de software e entregar um produto com maior maturidade técnica. Sommerville (2011) destaca que a evolução de software é uma etapa natural e necessária do ciclo de vida de sistemas, na qual requisitos são refinados e a arquitetura é ajustada conforme o conhecimento adquirido durante o uso e o desenvolvimento.
+
+A decisão de evoluir o Leciona também considerou o retorno da escola. Após a apresentação do protótipo no PI2, a Vice-Diretora indicou funcionalidades prioritárias, como a visualização consolidada de faltas por período e a comunicação antecipada de substituições aos professores. Essas demandas reforçaram a necessidade de uma API que permitisse o consumo dos dados por diferentes interfaces, além do painel web já existente.
+
+Este relatório parcial apresenta a evolução do sistema Leciona no contexto do Projeto Integrador III. O foco recai sobre os módulos de gestão de horários, registro de ausências, alocação de substituições e comunicação com a equipe escolar. São descritas a arquitetura modular adotada, a estratégia de deploy contínuo em nuvem utilizando Docker, a implementação de testes automatizados para validação de regras de negócio, a construção da API RESTful e o desenvolvimento de um dashboard analítico para suporte à gestão. O documento também detalha a metodologia empregada, o cronograma de atividades e os resultados parciais obtidos até o momento.
