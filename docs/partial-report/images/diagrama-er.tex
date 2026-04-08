@@ -1,0 +1,195 @@
+\documentclass[a4paper,landscape]{article}
+\usepackage[margin=1cm]{geometry}
+\pagestyle{empty}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, calc, fit, backgrounds}
+
+\definecolor{coreColor}{HTML}{4A90D9}
+\definecolor{schedColor}{HTML}{50B848}
+\definecolor{attColor}{HTML}{E8533F}
+\definecolor{commColor}{HTML}{F5A623}
+\definecolor{headerBg}{HTML}{2C3E50}
+
+\tikzset{
+    entity/.style={
+        rectangle,
+        draw=#1,
+        line width=1pt,
+        minimum width=4.2cm,
+        inner sep=0pt,
+        outer sep=0pt,
+    },
+    entity header/.style={
+        rectangle,
+        fill=#1,
+        text=white,
+        font=\bfseries\small,
+        minimum width=4.2cm,
+        minimum height=0.6cm,
+        inner sep=3pt,
+        anchor=north,
+    },
+    entity body/.style={
+        rectangle,
+        fill=#1!5,
+        draw=#1,
+        line width=1pt,
+        minimum width=4.2cm,
+        inner sep=4pt,
+        font=\footnotesize,
+        text width=3.8cm,
+        anchor=north,
+    },
+    rel/.style={
+        -{Stealth[length=6pt]},
+        thick,
+        #1,
+    },
+    m2m/.style={
+        {Stealth[length=6pt]}-{Stealth[length=6pt]},
+        thick,
+        #1,
+        dashed,
+    },
+    module label/.style={
+        font=\footnotesize\bfseries\itshape,
+        text=#1,
+    },
+}
+
+\newcommand{\entityNode}[5]{%
+    % #1=name, #2=color, #3=title, #4=fields, #5=position
+    \node[entity header=#2] (#1-header) at (#5) {#3};
+    \node[entity body=#2, below=0pt of #1-header] (#1-body) {#4};
+    \coordinate (#1) at ($(#1-header.north)!0.5!(#1-body.south)$);
+    \node[fit=(#1-header)(#1-body), inner sep=0pt] (#1-box) {};
+}
+
+\begin{document}
+\begin{tikzpicture}[node distance=1.2cm and 1.8cm]
+
+% ── MODULE: CORE (blue) ─────────────────────────────────────────────
+
+\entityNode{teacher}{coreColor}{Teacher}{%
+    \underline{id} : BigAutoField (PK)\\
+    name : CharField(200)\\
+    phone : CharField(17)\\
+    is\_substitute : BooleanField\\
+    subjects : M2M $\rightarrow$ Subject
+}{0, 0}
+
+\entityNode{subject}{coreColor}{Subject}{%
+    \underline{id} : BigAutoField (PK)\\
+    name : CharField(200)
+}{0, -3.2}
+
+\entityNode{classgroup}{coreColor}{ClassGroup}{%
+    \underline{id} : BigAutoField (PK)\\
+    name : CharField(200)\\
+    segment : FK $\rightarrow$ SchoolSegment\\
+    period : FK $\rightarrow$ SchoolPeriod
+}{-5.8, 0}
+
+\entityNode{segment}{coreColor}{SchoolSegment}{%
+    \underline{id} : BigAutoField (PK)\\
+    name : CharField(200)
+}{-5.8, -3.2}
+
+\entityNode{period}{coreColor}{SchoolPeriod}{%
+    \underline{id} : BigAutoField (PK)\\
+    name : CharField(200)
+}{-5.8, -5.4}
+
+\entityNode{justification}{coreColor}{Justification}{%
+    \underline{id} : BigAutoField (PK)\\
+    name : CharField(200)
+}{0, -5.4}
+
+% ── MODULE: SCHEDULE (green) ────────────────────────────────────────
+
+\entityNode{schedule}{schedColor}{Schedule}{%
+    \underline{id} : BigAutoField (PK)\\
+    day\_of\_week : CharField(20)\\
+    class\_group : FK $\rightarrow$ ClassGroup\\
+    teacher : FK $\rightarrow$ Teacher\\
+    subject : FK $\rightarrow$ Subject\\
+    start\_time : TimeField\\
+    end\_time : TimeField\\[3pt]
+    \textit{UC: teacher + day + start}\\
+    \textit{UC: class + day + start}
+}{6.5, 0}
+
+% ── MODULE: ATTENDANCE (red) ────────────────────────────────────────
+
+\entityNode{absence}{attColor}{TeacherAbsence}{%
+    \underline{id} : BigAutoField (PK)\\
+    start\_date : DateField (idx)\\
+    end\_date : DateField (idx)\\
+    teacher : FK $\rightarrow$ Teacher\\
+    justification : FK $\rightarrow$ Justification
+}{6.5, -4.2}
+
+\entityNode{substitution}{attColor}{TeacherSubstitution}{%
+    \underline{id} : BigAutoField (PK)\\
+    start\_date : DateField (idx)\\
+    end\_date : DateField (idx)\\
+    absent\_teacher : FK $\rightarrow$ Teacher\\
+    substitute\_teacher : FK $\rightarrow$ Teacher
+}{6.5, -7.8}
+
+% ── MODULE: COMMUNICATION (orange) ──────────────────────────────────
+
+\entityNode{message}{commColor}{Message}{%
+    \underline{id} : BigAutoField (PK)\\
+    message\_type : CharField(20)\\
+    date : DateField\\
+    description : TextField\\
+    image : ImageField (opcional)\\
+    class\_groups : M2M $\rightarrow$ ClassGroup\\
+    teachers : M2M $\rightarrow$ Teacher
+}{-5.8, -8}
+
+% ── RELATIONSHIPS ───────────────────────────────────────────────────
+
+% Core internal
+\draw[rel=coreColor] (classgroup-body.south) -- ++(0,-0.3) -| node[pos=0.25, above, font=\tiny]{FK} (segment-header.north);
+\draw[rel=coreColor] (classgroup-body.south east) -- ++(0.3,-0.3) -- ++(0, -1.15) -| (period-header.north west) node[pos=0.0, above, font=\tiny]{};
+\draw[m2m=coreColor] (teacher-body.south) -- node[right, font=\tiny]{M2M} (subject-header.north);
+
+% Schedule FKs
+\draw[rel=schedColor] (schedule-body.west) -- ++(-0.5, 0) |- (teacher-header.east) node[pos=0.25, above, font=\tiny]{};
+\draw[rel=schedColor] (schedule-body.south west) -- ++(-0.5,-0.3) |- (subject-header.east) node[pos=0.0, above, font=\tiny]{};
+\draw[rel=schedColor] (schedule-header.west) -- ++(-2.0,0) |- (classgroup-header.east) node[pos=0.0, above, font=\tiny]{};
+
+% Attendance FKs
+\draw[rel=attColor] (absence-body.west) -- ++(-1.0, 0) |- (teacher-body.east) node[pos=0.0, above, font=\tiny]{};
+\draw[rel=attColor] (absence-body.south west) -- ++(-0.5, -0.3) |- (justification-body.east) node[pos=0.0, above, font=\tiny]{};
+\draw[rel=attColor] (substitution-body.west) -- ++(-2.3, 0) |- ([yshift=-2pt]teacher-body.south east) node[pos=0.0, above, font=\tiny]{};
+
+% Communication M2M
+\draw[m2m=commColor] (message-header.north) -- ++(0, 0.6) -| ([xshift=-3pt]classgroup-body.south) node[pos=0.0, above, font=\tiny]{};
+\draw[m2m=commColor] (message-header.north east) -- ++(0.5, 1.6) -| ([xshift=5pt]teacher-body.south west) node[pos=0.0, above, font=\tiny]{};
+
+% ── MODULE LABELS ───────────────────────────────────────────────────
+
+\node[module label=coreColor] at (-2.9, 1.0) {core};
+\node[module label=schedColor] at (6.5, 1.0) {schedule};
+\node[module label=attColor] at (6.5, -3.2) {attendance};
+\node[module label=commColor] at (-5.8, -7.0) {communication};
+
+% ── LEGEND ──────────────────────────────────────────────────────────
+
+\node[anchor=north west, font=\footnotesize] at (-8, -10.5) {
+    \begin{tabular}{ll}
+    \tikz\draw[rel=black] (0,0) -- (0.6,0); & Chave estrangeira (FK) \\
+    \tikz\draw[m2m=black] (0,0) -- (0.6,0); & Relacionamento M2M \\
+    \textit{UC} & UniqueConstraint \\
+    \textit{idx} & Campo indexado (db\_index) \\
+    \end{tabular}
+};
+
+\end{tikzpicture}
+\end{document}
