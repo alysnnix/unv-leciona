@@ -30,6 +30,8 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 # In production, specify your domains in .env: ALLOWED_HOSTS=leciona.com,www.leciona.com
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',') if os.environ.get('CSRF_TRUSTED_ORIGINS') else []
+
 
 # Application definition
 

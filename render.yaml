@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: leciona
+    runtime: python
+    plan: free
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "gunicorn config.wsgi:application --bind 0.0.0.0:8080 --workers 2"
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: "False"
+      - key: PYTHON_VERSION
+        value: "3.10.12"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"
+      - key: DB_NAME
+        value: postgres
+      - key: DB_USER
+        value: postgres.lwlhmshzofpuccenevpf
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_HOST
+        value: aws-0-sa-east-1.pooler.supabase.com
+      - key: DB_PORT
+        value: "6543"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://leciona.onrender.com"
