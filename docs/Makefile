@@ -2,7 +2,7 @@ SHARED     := $(CURDIR)/shared
 TEXINPUTS  := $(SHARED)//:
 
 # Documentos disponíveis
-DOCS := company-authorization-term consent-term partial-report
+DOCS := company-authorization-term consent-term unified-terms partial-report
 
 # ── Build ────────────────────────────────────────────────────────────────────
 

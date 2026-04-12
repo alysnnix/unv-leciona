@@ -1,0 +1,72 @@
+% =============================================================================
+% Termos Unificados — Projeto Integrador UNIVESP
+% Autorização da Empresa + Consentimento Livre e Esclarecido
+% =============================================================================
+\documentclass[
+    12pt,
+    a4paper,
+    oneside
+]{report}
+
+\usepackage{univesp-abnt}
+\geometry{top=1.5cm, bottom=1.5cm, left=2.5cm, right=2.5cm}
+
+% ── Pacotes adicionais ──────────────────────────────────────────────────────
+\usepackage{amssymb}       % \square para checkboxes
+
+% ── Metadata compartilhada ──────────────────────────────────────────────────
+\newcommand{\doctitulo}{Leciona: Plataforma Cloud de Gestão Escolar e API}
+\newcommand{\docautores}{%
+    Allan Di Pace Schmidt, RA 23203894;
+    Alysson Alcantara, RA 23211184;
+    Anderson de Souza Pereira, RA 23212113;
+    Mariana Luisa de Faria Santos, RA 23211903;
+    Guilherme Cardoso de Almeida, RA 23206504;
+    Luiz Felipe Amaral de Almeida, RA 23226208;
+    Whedja Silva Cavalcante, RA 23220169%
+}
+\newcommand{\docempresa}{Escola Municipal Patrícia Viviani}
+\newcommand{\doctipo}{Projeto Integrador}
+\newcommand{\docobjeto}{%
+    Evoluir o sistema ``Leciona'' com deploy contínuo em nuvem, garantindo a
+    integridade da alocação de horários via testes automatizados. Além disso,
+    implementar uma API RESTful para permitir a descentralização do consumo de
+    dados de horários e faltas por parte dos professores e gestão,
+    possibilitando um uso cada vez mais eficiente, ágil e consistente por parte
+    dos usuários, gerando valor para a escola e toda sua comunidade.%
+}
+\newcommand{\doccidade}{São Sebastião -- SP}
+\newcommand{\docano}{2026}
+
+% ── Metadata do consentimento ───────────────────────────────────────────────
+\newcommand{\docobjetivo}{%
+    Evoluir o sistema ``Leciona'' com deploy contínuo em nuvem, garantindo a
+    integridade da alocação de horários via testes automatizados. Além disso,
+    implementar uma API RESTful para permitir a descentralização do consumo de
+    dados de horários e faltas por parte dos professores e gestão,
+    possibilitando um uso mais eficiente e consistente por parte dos usuários.%
+}
+\newcommand{\docresponsavel}{%
+    Allan Di Pace Schmidt; Alysson Alcantara; Anderson de Souza Pereira;
+    Luiz Felipe Amaral de Almeida; Mariana Luisa de Faria Santos;
+    Guilherme Cardoso de Almeida; Whedja Silva Cavalcante%
+}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{document}
+\selectlanguage{brazil}
+\frenchspacing
+\pagestyle{empty}
+\singlespacing
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{1.25cm}
+
+\input{content/autorizacao}
+
+\newpage
+\setlength{\parskip}{3pt}
+\setlength{\parindent}{0pt}
+
+\input{content/consentimento}
+
+\end{document}
